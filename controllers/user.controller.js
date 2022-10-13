@@ -1,8 +1,13 @@
-const { response } = require('express')
+const { request, response } = require('express')
 
-const getUsers = (req, res = response) => {
+const getUsers = (req = request, res = response) => {
+  const { name, lastname, age, city = 'Medellín' } = req.query
   res.json({
     msg: 'get API - controlador',
+    name,
+    lastname,
+    age,
+    city,
   })
 }
 
@@ -16,8 +21,10 @@ const createUser = (req, res = response) => {
 }
 
 const updateUser = (req, res = response) => {
+  const id = req.params.id
   res.status(400).json({
     msg: 'put API - controlador',
+    id,
   })
 }
 
