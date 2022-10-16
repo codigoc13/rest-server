@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
 
-const { isValidRole } = require('../helpers/db-validators')
+const { isValidRole, emailExists } = require('../helpers/db-validators')
 const { validateFields } = require('../middlewares/validate-fields')
 
 const {
@@ -26,6 +26,7 @@ router.post(
   ],
   [check('email', 'El email es obligatorio').not().isEmpty()],
   [check('email', 'El email no es válido').isEmail()],
+  check('email').custom(emailExists),
   [check('role', 'El rol es obligatorio').not().isEmpty()],
   check('role').custom(isValidRole),
   validateFields,
