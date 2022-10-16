@@ -1,4 +1,5 @@
 const { request, response } = require('express')
+const bcryptjs = require('bcryptjs')
 const User = require('../models/user')
 
 const getUsers = (req = request, res = response) => {
@@ -13,8 +14,14 @@ const getUsers = (req = request, res = response) => {
 }
 
 const createUser = async (req, res = response) => {
-  const body = req.body
-  const user = new User(body)
+  const { name, email, password, role } = req.body
+  const user = new User({ name, email, password, role })
+
+  // Verificar si el correo ya existe en la BD
+
+  // Encriptar la contraseña
+  const salt = bcryptjs.genSaltSync()
+  user.password = bcryptjs.hashSync(password, salt)
   await user.save() // Cuando esto genera error rompe la app
 
   res.status(201).json({
