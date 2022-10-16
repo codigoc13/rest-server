@@ -2,14 +2,13 @@ const { request, response } = require('express')
 const bcryptjs = require('bcryptjs')
 const User = require('../models/user')
 
-const getUsers = (req = request, res = response) => {
-  const { name, lastname, age, city = 'Medellín' } = req.query
+const getUsers = async (req = request, res = response) => {
+  let { from = 0, quantity = 2 } = req.query
+  from = from <= 0 || isNaN(from) ? 0 : from - 1
+
+  const users = await User.find().skip(from).limit(quantity)
   res.json({
-    msg: 'get API - controlador',
-    name,
-    lastname,
-    age,
-    city,
+    users,
   })
 }
 
