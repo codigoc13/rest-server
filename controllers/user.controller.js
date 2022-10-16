@@ -17,10 +17,7 @@ const createUser = async (req, res = response) => {
   const { name, email, password, role } = req.body
   const user = new User({ name, email, password, role })
 
-  // Encripta contraseña
   user.password = bcryptjs.hashSync(password, bcryptjs.genSaltSync())
-
-  // Guarda el usuario
   await user.save()
 
   res.status(201).json({
@@ -30,14 +27,12 @@ const createUser = async (req, res = response) => {
 
 const updateUser = async (req, res = response) => {
   const { id } = req.params
-  const { password, google, ...remainder } = req.body
+  const { _id, password, google, ...remainder } = req.body
 
-  // TODO: Validar contra base de datos
   if (password) {
     remainder.password = bcryptjs.hashSync(password, bcryptjs.genSaltSync())
   }
-
-  const user = await User.findByIdAndUpdate(id, remainder)
+  const user = await User.findByIdAndUpdate(id, remainder, { new: true })
 
   res.status(200).json({
     user,
