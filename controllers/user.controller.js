@@ -27,7 +27,7 @@ const getUsers = async (req = request, res = response) => {
   })
 }
 
-const createUser = async (req, res = response) => {
+const createUser = async (req = request, res = response) => {
   const { name, email, password, role } = req.body
   const user = new User({ name, email, password, role })
 
@@ -39,7 +39,7 @@ const createUser = async (req, res = response) => {
   })
 }
 
-const updateUser = async (req, res = response) => {
+const updateUser = async (req = request, res = response) => {
   const { id } = req.params
   const { _id, password, google, ...remainder } = req.body
 
@@ -53,9 +53,16 @@ const updateUser = async (req, res = response) => {
   })
 }
 
-const deleteUser = (req, res = reponse) => {
+const deleteUser = async (req = request, res = reponse) => {
+  const { id } = req.params
+
+  // Borrar físicamente de la BD
+  // const deletedUser = await User.findByIdAndDelete(id)
+
+  // Cambiando el estado del usuario
+  const deletedUser = await User.findByIdAndUpdate(id, { status: false })
   res.json({
-    msg: 'delete API - controlador',
+    deletedUser,
   })
 }
 

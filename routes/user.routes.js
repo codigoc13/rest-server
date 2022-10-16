@@ -48,6 +48,14 @@ router.put(
   updateUser
 )
 
-router.delete('/', deleteUser)
+router.delete(
+  '/:id',
+  [
+    check('id', `El ID no es válido`).isMongoId(),
+    check('id').custom(userByIdExists),
+    validateFields,
+  ],
+  deleteUser
+)
 
 module.exports = router
