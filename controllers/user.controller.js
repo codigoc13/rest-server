@@ -17,21 +17,30 @@ const createUser = async (req, res = response) => {
   const { name, email, password, role } = req.body
   const user = new User({ name, email, password, role })
 
-  // Encriptar la contraseña
-  const salt = bcryptjs.genSaltSync()
-  user.password = bcryptjs.hashSync(password, salt)
-  await user.save() // Cuando esto genera error rompe la app
+  // Encripta contraseña
+  user.password = bcryptjs.hashSync(password, bcryptjs.genSaltSync())
+
+  // Guarda el usuario
+  await user.save()
 
   res.status(201).json({
     user,
   })
 }
 
-const updateUser = (req, res = response) => {
-  const id = req.params.id
-  res.status(400).json({
-    msg: 'put API - controlador',
-    id,
+const updateUser = async (req, res = response) => {
+  const { id } = req.params
+  const { password, google, ...remainder } = req.body
+
+  // TODO: Validar contra base de datos
+  if (password) {
+    remainder.password = bcryptjs.hashSync(password, bcryptjs.genSaltSync())
+  }
+
+  const user = await User.findByIdAndUpdate(id, remainder)
+
+  res.status(200).json({
+    user,
   })
 }
 
