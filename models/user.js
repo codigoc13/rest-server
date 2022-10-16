@@ -1,20 +1,7 @@
-/**
- * {
-    name: 'nombre y apellido',
-    email: 'email@gmail.com',
-    password: 'lkdjfalskdgjaopiweaf65+',
-    img: 'urldelaimagen',
-    role: 'algún rol',
-    estatus: false,
-    google: false
-    }
- * 
- */
-
 const { Schema, model } = require('mongoose')
 
 const userSchema = Schema({
-  nombre: {
+  name: {
     type: String,
     required: [true, 'El nombre es obligatorio'],
   },

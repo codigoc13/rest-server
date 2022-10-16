@@ -1,4 +1,5 @@
 const { request, response } = require('express')
+const User = require('../models/user')
 
 const getUsers = (req = request, res = response) => {
   const { name, lastname, age, city = 'Medellín' } = req.query
@@ -11,12 +12,13 @@ const getUsers = (req = request, res = response) => {
   })
 }
 
-const createUser = (req, res = response) => {
-  const { name, age } = req.body
+const createUser = async (req, res = response) => {
+  const body = req.body
+  const user = new User(body)
+  await user.save() // Cuando esto genera error rompe la app
+
   res.status(201).json({
-    msg: 'post API - controlador',
-    name,
-    age,
+    user,
   })
 }
 
