@@ -40,4 +40,6 @@ const validateJWT = async (req = request, res = response, next) => {
   }
 }
 
-module.exports = validateJWT
+module.exports = {
+  validateJWT,
+}
