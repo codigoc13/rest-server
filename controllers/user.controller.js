@@ -17,14 +17,6 @@ const createUser = async (req, res = response) => {
   const { name, email, password, role } = req.body
   const user = new User({ name, email, password, role })
 
-  // Verificar si el correo ya existe en la BD
-  const emailExists = await User.findOne({ email })
-  if (emailExists) {
-    return res.status(400).json({
-      mgs: 'Ese correo ya está registrado',
-    })
-  }
-
   // Encriptar la contraseña
   const salt = bcryptjs.genSaltSync()
   user.password = bcryptjs.hashSync(password, salt)
