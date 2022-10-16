@@ -7,6 +7,7 @@ const {
   deleteUser,
 } = require('../controllers/user.controller')
 const { validateFields } = require('../middlewares/validate-fields')
+const Role = require('../models/role')
 
 const router = Router()
 
@@ -24,12 +25,18 @@ router.post(
   [check('email', 'El email es obligatorio').not().isEmpty()],
   [check('email', 'El email no es válido').isEmail()],
   [check('role', 'El rol es obligatorio').not().isEmpty()],
-  [
+  /*[ 
     check('role', 'El rol no es válido, debe ser ADMIN_ROLE o USER_ROLE').isIn([
       'ADMIN_ROLE',
       'USER_ROLE',
     ]),
-  ],
+  ], */
+  check('role').custom(async (role = '') => {
+    const existsRole = await Role.findOne({ role })
+    if (!existsRole) {
+      throw new Error(`El rol ${role} no está registrado en la base de datos`)
+    }
+  }),
   validateFields,
   createUser
 )
