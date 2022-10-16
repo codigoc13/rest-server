@@ -55,6 +55,7 @@ const updateUser = async (req = request, res = response) => {
 
 const deleteUser = async (req = request, res = reponse) => {
   const { id } = req.params
+  // const { uid } = req
 
   // Borrar físicamente de la BD
   // const deletedUser = await User.findByIdAndDelete(id)
@@ -63,6 +64,7 @@ const deleteUser = async (req = request, res = reponse) => {
   const deletedUser = await User.findByIdAndUpdate(id, { status: false })
   res.json({
     deletedUser,
+    // uid,
   })
 }
 
