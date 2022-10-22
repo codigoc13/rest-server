@@ -30,7 +30,7 @@
     <script>
       let url = window.location.hostname.includes('localhost')
         ? 'http://localhost:8080/api/auth/google'
-        : 'https://rest-server-node-js-sm.herokuapp.com'
+        : 'https://rest-server-node-js-sm.herokuapp.com/api/auth/google'
 
       function handleCredentialResponse(response) {
         // Google token : ID_TOKEN
