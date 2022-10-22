@@ -7,7 +7,7 @@
     <title>Google Sign-in</title>
   </head>
   <body>
-    <h1>Google Sign-in</h1>
+    <h1>Google Sign-in!</h1>
     <hr />
     <div
       id="g_id_onload"
@@ -29,7 +29,21 @@
     <script>
       function handleCredentialResponse(response) {
         // Google token : ID_TOKEN
-        console.log('id_token', response.credential)
+        //console.log('id_token', response.credential)
+        const body = { id_token: response.credential }
+
+        fetch('http://localhost:8080/api/auth/google', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        })
+          .then((resp) => resp.json())
+          .then((resp) => {
+            console.log(resp)
+          })
+          .catch(console.warn)
       }
     </script>
   </body>
