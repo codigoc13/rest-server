@@ -18,8 +18,13 @@ const CategorySchema = Schema({
 })
 
 CategorySchema.methods.toJSON = function () {
-  const { __v, _id, ...category } = this.toObject()
+  const { __v, _id, status, ...category } = this.toObject()
   category.id = _id
+
+  const { _id: _uId, password, __v: __uV, ...user } = category.user
+  user.id = _uId
+  category.user = user
+
   return category
 }
 
