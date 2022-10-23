@@ -12,9 +12,9 @@ const validateJWT = async (req = request, res = response, next) => {
   }
 
   try {
-    const { uid } = jwt.verify(token, process.env.SECRET_OR_PRIVATE_KEY)
+    const { id } = jwt.verify(token, process.env.SECRET_OR_PRIVATE_KEY)
 
-    const user = await User.findById(uid)
+    const user = await User.findById(id)
 
     // Validar que el usuario no sea undefined
     if (!user) {
@@ -31,7 +31,6 @@ const validateJWT = async (req = request, res = response, next) => {
     }
 
     req.authenticatedUser = user
-    req.uid = user.id
     next()
   } catch (error) {
     console.log(error)

@@ -1,6 +1,8 @@
-const Role = require('../models/role')
-const User = require('../models/user')
+const { Category, Role, User } = require('../models')
 
+/**
+ * Validación contra la BD de usuarios
+ */
 const isValidRole = async (role = '') => {
   const existsRole = await Role.findOne({ role })
   if (!existsRole) {
@@ -22,8 +24,19 @@ const userByIdExists = async (id = '') => {
   }
 }
 
+/**
+ * Validación contra la BD de categorías
+ */
+const categoryByIdExists = async (id = '') => {
+  const categoryExists = await Category.findById(id)
+  if (!categoryExists) {
+    throw new Error(`Categoría con id '${id}' no existe en la base de datos`)
+  }
+}
+
 module.exports = {
   isValidRole,
   emailExists,
   userByIdExists,
+  categoryByIdExists,
 }

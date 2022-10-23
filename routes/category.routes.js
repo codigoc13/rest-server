@@ -1,14 +1,31 @@
 const { Router } = require('express')
 const { check } = require('express-validator')
 
-const { validateFields, validateJWT } = require('../middlewares')
-const { createCategory } = require('../controllers/category.controller')
+const { validateFields, validateJWT, isRole } = require('../middlewares')
+const {
+  createCategory,
+  getCategories,
+  updateCategory,
+  getCategoryById,
+  deleteCategory,
+} = require('../controllers/category.controller')
+const { categoryByIdExists } = require('../helpers/db-validators')
 
 const router = Router()
 
 // Obtener todas las categorías - público
+router.get('/', getCategories)
 
 // Obtener una categoría por id - público
+router.get(
+  '/:id',
+  [
+    check('id', 'El ID no es válido').isMongoId(),
+    check('id').custom(categoryByIdExists),
+    validateFields,
+  ],
+  getCategoryById
+)
 
 // Crear categoría - privado - cualquier persona con un token válido
 router.post(
@@ -22,7 +39,30 @@ router.post(
 )
 
 // Actualizar una categoría por id - privado - cualquier persona con un token válido
+router.put(
+  '/:id',
+  [
+    validateJWT,
+    check('id', 'El ID no es válido').isMongoId(),
+    check('id').custom(categoryByIdExists),
+    check('name', 'El nombre es obligatorio').not().isEmpty(),
+    validateFields,
+  ],
+  updateCategory
+)
 
 // Eliminar una categorpia por id - privado - Admin
+router.delete(
+  '/:id',
+  [
+    validateJWT,
+    isRole('ADMIN_ROLE'),
+    check('id', 'El ID no es válido').isMongoId(),
+    check('id').custom(categoryByIdExists),
+    validateFields,
+  ],
+
+  deleteCategory
+)
 
 module.exports = router
