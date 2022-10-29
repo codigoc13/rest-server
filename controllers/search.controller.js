@@ -5,11 +5,29 @@ const { ObjectId } = require('mongoose').Types
 const allowedCollections = ['users', 'categories', 'products', 'roles']
 
 const searchUsers = async (searchTerm = '', res = response) => {
-  const isMongoId = ObjectId.isValid(searchTerm)
-  if (isMongoId) {
-    const user = await User.findById(searchTerm)
+  try {
+    const isMongoId = ObjectId.isValid(searchTerm)
+    if (isMongoId) {
+      const user = await User.findById(searchTerm)
+      return res.status(200).json({
+        results: user ? [user] : [],
+      })
+    }
+
+    const regex = new RegExp(searchTerm, 'i')
+
+    const users = await User.find({
+      $or: [{ name: regex }, { email: regex }],
+      $and: [{ status: true }],
+    })
     res.status(200).json({
-      results: user ? [user] : [],
+      quantity: users.length,
+      results: users,
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      msg: 'Error en el servidor',
     })
   }
 }
