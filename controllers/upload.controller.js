@@ -72,7 +72,56 @@ const updateImg = async (req = request, res = response) => {
   }
 }
 
+const getImg = async (req = request, res = response) => {
+  try {
+    const { collection, id } = req.params
+
+    let model
+    let entity
+
+    switch (collection) {
+      case 'users':
+        entity = 'user'
+        model = await User.findById(id)
+        if (!model) {
+          return res.status(400).json({
+            msg: `No existe un usuario con el id ${id}`,
+          })
+        }
+        break
+
+      case 'products':
+        entity = 'user'
+        model = await Product.findById(id)
+        if (!model) {
+          return res.status(400).json({
+            msg: `No existe un producto con el id ${id}`,
+          })
+        }
+        break
+
+      default:
+        return res.status(500).json({
+          msg: `Por validar la colección ${collection}`,
+        })
+    }
+
+    if (model.img) {
+      const pathImg = path.join(__dirname, '../uploads', collection, model.img)
+      if (fs.existsSync(pathImg)) {
+        return res.sendFile(pathImg)
+      }
+    }
+
+    res.json({ msg: 'Falta placeholder' })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ msg: 'Error en el servidor' })
+  }
+}
+
 module.exports = {
   upload,
   updateImg,
+  getImg,
 }
