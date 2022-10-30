@@ -48,10 +48,8 @@ ProductSchema.methods.toJSON = function () {
   const { __v, _id, status, createdAt, modifiedAt, ...product } =
     this.toObject()
   product.id = _id
-  product.createdAt = DateTime.fromJSDate(createdAt, {
-    zone: 'America/Bogota',
-  })
 
+  product.createdAt = DateTime.fromISO(createdAt.toISOString())
   product.modifiedAt = DateTime.fromJSDate(modifiedAt, {
     zone: 'America/Bogota',
   })
