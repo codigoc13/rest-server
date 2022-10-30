@@ -1,4 +1,6 @@
 const path = require('path')
+const { v4: uuidv4 } = require('uuid')
+
 const { request, response } = require('express')
 
 const uploadFile = (req = request, res = response) => {
@@ -20,22 +22,20 @@ const uploadFile = (req = request, res = response) => {
         allowedExtensions,
       })
     }
-    res.json({
-      extension,
+
+    const tempName = `${uuidv4()}.${extension}`
+    const uploadPath = path.join(__dirname, '../uploads/', tempName)
+
+    file.mv(uploadPath, (err) => {
+      if (err) {
+        console.log(err)
+        return res.status(500).json({ err })
+      }
+
+      res.status(200).json({
+        msg: `Archivo subido a ${uploadPath}`,
+      })
     })
-
-    // const uploadPath = path.join(__dirname, '../uploads/', file.name)
-
-    // file.mv(uploadPath, (err) => {
-    //   if (err) {
-    //     console.log(err)
-    //     return res.status(500).json({ err })
-    //   }
-
-    //   res.status(200).json({
-    //     msg: `Archivo subido a ${uploadPath}`,
-    //   })
-    // })
   } catch (error) {
     console.log(error)
     res.status(500).json({
