@@ -1,4 +1,6 @@
 const { request, response } = require('express')
+const path = require('path')
+const fs = require('fs')
 
 const { User, Product } = require('../models')
 const { uploadFile } = require('../helpers')
@@ -49,6 +51,13 @@ const updateImg = async (req = request, res = response) => {
         return res.status(500).json({
           msg: `Por validar la colección ${collection}`,
         })
+    }
+
+    if (model.img) {
+      const pathImg = path.join(__dirname, '../uploads', collection, model.img)
+      if (fs.existsSync(pathImg)) {
+        fs.unlinkSync(pathImg)
+      }
     }
 
     const name = await uploadFile(req.files, undefined, collection)
