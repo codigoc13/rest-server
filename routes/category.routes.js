@@ -2,14 +2,14 @@ const { Router } = require('express')
 const { check } = require('express-validator')
 
 const { validateFields, validateJWT, isRole } = require('../middlewares')
-const { categoryByIdExists } = require('../helpers/db-validators')
+const { categoryByIdExists } = require('../helpers')
 const {
-  createCategory,
   getCategories,
-  updateCategory,
   getCategoryById,
+  createCategory,
+  updateCategory,
   deleteCategory,
-} = require('../controllers/category.controller')
+} = require('../controllers')
 
 const router = Router()
 
@@ -61,7 +61,6 @@ router.delete(
     check('id').custom(categoryByIdExists),
     validateFields,
   ],
-
   deleteCategory
 )
 

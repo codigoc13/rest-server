@@ -1,40 +1,20 @@
-/**
- *
- *  name: String - required: true
- *  description: String
- *  available: Boolean, default: true
- *  price: Number - default : 0
- *  status: Boolean - default : true - required: true
- *  user : Schema.Types.ObjectId - required: true
- *  category: Schema.Types.ObjectId - required: true
- *  created_at: Date - required
- *  modified_at: Date - required
- */
-
 const { Router } = require('express')
 const { check } = require('express-validator')
 
+const { validateFields, validateJWT, isRole } = require('../middlewares')
+const { productByIdExists, categoryByIdExists } = require('../helpers')
 const {
-  createProduct,
   getProducts,
   getProductById,
+  createProduct,
   updateProduct,
   deleteProdut,
-} = require('../controllers/product-controller')
-const {
-  categoryByIdExists,
-  productByIdExists,
-  userByIdExists,
-} = require('../helpers/db-validators')
-
-const { validateFields, validateJWT, isRole } = require('../middlewares')
+} = require('../controllers')
 
 const router = Router()
 
-// Obtener productos paginados - público
 router.get('/', getProducts)
 
-// Obtener producto por id - público
 router.get(
   '/:id',
   [
@@ -45,7 +25,6 @@ router.get(
   getProductById
 )
 
-// Crear producto - privado - cualquier persona con un token válido
 router.post(
   '/',
   [
@@ -59,7 +38,6 @@ router.post(
   createProduct
 )
 
-// Actualizar producto - privado - cualquier persona con un token válido
 router.put(
   '/:id',
   [
@@ -75,7 +53,6 @@ router.put(
   updateProduct
 )
 
-// Eliminar producto por di - privado - Admin
 router.delete(
   '/:id',
   [
