@@ -19,6 +19,14 @@ const upload = async (req = request, res = response) => {
   }
 }
 
+const updateImg = async (req = request, res = response) => {
+  try {
+    const { collection, id } = req.params
+    res.json({ collection, id })
+  } catch (error) {}
+}
+
 module.exports = {
   upload,
+  updateImg,
 }
