@@ -8,16 +8,34 @@ const uploadFile = (req = request, res = response) => {
     }
 
     const { file } = req.files
-    const uploadPath = path.join(__dirname, '../uploads/', file.name)
+    const cutName = file.name.split('.')
+    const extension = cutName[cutName.length - 1]
 
-    file.mv(uploadPath, (err) => {
-      if (err) {
-        console.log(err)
-        return res.status(500).json({ err })
-      }
+    // Validar la extensión
 
-      res.status(200).json({ msg: `Archivo subido a ${uploadPath}` })
+    const allowedExtensions = ['png', 'jpg', 'jpeg', 'gif']
+    if (!allowedExtensions.includes(extension)) {
+      return res.status(400).json({
+        msg: `La extensión '${extension}' no es permitida`,
+        allowedExtensions,
+      })
+    }
+    res.json({
+      extension,
     })
+
+    // const uploadPath = path.join(__dirname, '../uploads/', file.name)
+
+    // file.mv(uploadPath, (err) => {
+    //   if (err) {
+    //     console.log(err)
+    //     return res.status(500).json({ err })
+    //   }
+
+    //   res.status(200).json({
+    //     msg: `Archivo subido a ${uploadPath}`,
+    //   })
+    // })
   } catch (error) {
     console.log(error)
     res.status(500).json({
