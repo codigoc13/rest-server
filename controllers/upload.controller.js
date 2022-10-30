@@ -113,7 +113,8 @@ const getImg = async (req = request, res = response) => {
       }
     }
 
-    res.json({ msg: 'Falta placeholder' })
+    const pathImg = path.join(__dirname, '../assets/no-image.jpg')
+    res.sendFile(pathImg)
   } catch (error) {
     console.log(error)
     res.status(500).json({ msg: 'Error en el servidor' })
