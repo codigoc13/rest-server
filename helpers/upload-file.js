@@ -13,7 +13,9 @@ const uploadFile = (
 
     if (!allowedExtensions.includes(extension)) {
       return reject(
-        `La extensión '${extension}' no es permitida. Funciones permitidas ${allowedExtensions}`
+        `La extensión '${extension}' no es permitida. Funciones permitidas: ${allowedExtensions.join(
+          ', '
+        )}`
       )
     }
 
