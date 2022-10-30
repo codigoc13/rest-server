@@ -22,4 +22,4 @@ const generateJWT = (id = '') => {
   })
 }
 
-module.exports = generateJWT
+module.exports = { generateJWT }
