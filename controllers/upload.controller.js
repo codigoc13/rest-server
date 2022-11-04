@@ -79,11 +79,9 @@ const getImg = async (req = request, res = response) => {
     const { collection, id } = req.params
 
     let model
-    let entity
 
     switch (collection) {
       case 'users':
-        entity = 'user'
         model = await User.findById(id)
         if (!model) {
           return res.status(400).json({
@@ -93,7 +91,6 @@ const getImg = async (req = request, res = response) => {
         break
 
       case 'products':
-        entity = 'user'
         model = await Product.findById(id)
         if (!model) {
           return res.status(400).json({
