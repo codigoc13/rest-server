@@ -40,7 +40,7 @@ const updateImg = async (req = request, res = response) => {
         break
 
       case 'products':
-        entity = 'user'
+        entity = 'products'
         model = await Product.findById(id)
         if (!model) {
           return res.status(400).json({
@@ -139,7 +139,7 @@ const updateImgCloudinary = async (req = request, res = response) => {
         break
 
       case 'products':
-        entity = 'user'
+        entity = 'product'
         model = await Product.findById(id)
         if (!model) {
           return res.status(400).json({

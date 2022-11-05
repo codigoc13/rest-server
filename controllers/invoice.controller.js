@@ -21,7 +21,7 @@ const getInvoices = async (req = request, res = response) => {
   }
 }
 
-const createInvoices = async (req = request, res = response) => {
+const createInvoice = async (req = request, res = response) => {
   try {
     const data = {
       user: '',
@@ -73,7 +73,17 @@ const createInvoices = async (req = request, res = response) => {
       })
     }
 
-    data.totalPrice = productsDB.reduce((a, b) => a.price + b.price)
+    if (productsDB.length === 0) {
+      return res.status(400).json({
+        msg: 'Debe haber como mínimo un producto para realizar la factura',
+      })
+    }
+
+    data.totalPrice =
+      productsDB.length === 1
+        ? productsDB[0].price
+        : productsDB.reduce((a, b) => a.price + b.price)
+
     data.products = productsDB
     data.createdAt = DateTime.now()
 
@@ -93,5 +103,5 @@ const createInvoices = async (req = request, res = response) => {
 
 module.exports = {
   getInvoices,
-  createInvoices,
+  createInvoice,
 }

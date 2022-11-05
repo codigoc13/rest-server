@@ -2,13 +2,13 @@ const { Router } = require('express')
 const { check } = require('express-validator')
 const {
   getInvoices,
-  createInvoices,
+  createInvoice,
 } = require('../controllers/invoice.controller')
 
 const router = Router()
 
 router.get('/', getInvoices)
 
-router.post('/', createInvoices)
+router.post('/', createInvoice)
 
 module.exports = router
