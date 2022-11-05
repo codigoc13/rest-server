@@ -1,3 +1,4 @@
+const { DateTime } = require('luxon')
 const { Schema, model } = require('mongoose')
 
 const InvoiceSchema = Schema({
@@ -22,13 +23,9 @@ const InvoiceSchema = Schema({
 })
 
 InvoiceSchema.methods.toJSON = function () {
-  const {
-    __v,
-    _id,
-    // products: productsDB,
-    ...invoice
-  } = this.toObject()
+  const { __v, _id, createdAt, ...invoice } = this.toObject()
   invoice.id = _id
+  invoice.createdAt = DateTime.fromISO(createdAt.toISOString())
 
   const { _id: _uId, password, __v: __uV, ...user } = invoice.user
   user.id = _uId
